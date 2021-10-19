@@ -49,12 +49,23 @@ app.get('/write', function(req, res) {
 app.post('/add', function(req, res) {
     res.send('전송완료!');
 
-    // 어떤 사람이 /add 라는 경로로 post 요청을 하면,
-    // 데이터 2개 (날짜, 제목)을 보내주는데,
-    // 이때, post 라는 이름을 가진 collection 에 두개 데이터를 저장하기
-    db.collection('post').insertOne( {제목 : req.body.title, 날짜 : req.body.date}, function(error, result) {
-        console.log('저장완료');
+    // 총게시물개수가 담겨있는 컬렉션에서 개수 가져오기
+    // 전체 다 찾고 싶으면 .find().toArray()
+    // 하나만 찾고 싶으면
+    db.collection('counter').findOne({name : '게시물갯수'}, function(error, result) {
+        console.log(result.totalPost); // 0
+        var totalCount = result.totalPost;
+        // 어떤 사람이 /add 라는 경로로 post 요청을 하면,
+        // 데이터 2개 (날짜, 제목)을 보내주는데,
+        // 이때, post 라는 이름을 가진 collection 에 두개 데이터를 저장하기
+        db.collection('post').insertOne( { _id : totalCount + 1, 제목 : req.body.title, 날짜 : req.body.date }, function(error, result) {
+            console.log('저장완료');
+        });
+
+        // counter 라는 콜렉션에 있는 totalPost 라는 항목도 1 증가시켜야 함. 게시물 하나를 등록할 때마다 카운터도 1 증가 시켜야 함.
+
     });
+
 
     // console.log(req.body.title);    
     // console.log(req.body.date);    
