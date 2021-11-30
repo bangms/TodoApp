@@ -36,9 +36,10 @@
     <ul class="list-group">
       <% for(var i = 0; i < posts.length; i++) {%>
         <li class="list-group-item">
+          <p>글 번호 : <%= posts[i]._id %></p>
           <h4 class="ml-2 my-3"> 할일 제목 : <%= posts[i].제목 %> </h4>
           <p> 할일 마감날짜 : <%= posts[i].날짜 %> </p>
-          <button type="button" class="btn btn-secondary">삭제</button>      
+          <button type="button" class="delete btn btn-secondary" data-id="<%= posts[i]._id %>">삭제</button>      
         </li>
       <% } %>
     </ul>
@@ -47,12 +48,17 @@
 
     <script>
 
-      $.ajax({
-        method : 'DELETE',
-        url : '/delete',
-        data : '게시물 번호' // 요청 보낼 때 삭제할 게시물 번호를 함께 전송
-      }).done(function(결과) {
-
+      $('.delete').click(function(e) {
+        var number = e.target.dataset.id;
+        console.log('선택된 글 번호 : ' + number);
+        $.ajax({
+          method : 'DELETE',
+          url : '/delete',
+          data : {_id : number} // 요청 보낼 때 삭제할 게시물 번호를 함께 전송
+        }).done(function(result) {
+          // 페이지를 강제로 새로고침하고 삭제 버튼 누른 li 요소를 제거하기
+          
+        });
       });
 
     </script>  

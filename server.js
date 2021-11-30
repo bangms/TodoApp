@@ -53,23 +53,25 @@ app.post('/add', function(req, res) {
     // 전체 다 찾고 싶으면 .find().toArray()
     // 하나만 찾고 싶으면
     db.collection('counter').findOne({name : '게시물갯수'}, function(error, result) {
-        console.log(result.totalPost); // 0
+        console.log('총 게시물 개수 : ' + result.totalPost); // 0
         var totalCount = result.totalPost;
         // 어떤 사람이 /add 라는 경로로 post 요청을 하면,
         // 데이터 2개 (날짜, 제목)을 보내주는데,
         // 이때, post 라는 이름을 가진 collection 에 두개 데이터를 저장하기
         db.collection('post').insertOne( { _id : totalCount + 1, 제목 : req.body.title, 날짜 : req.body.date }, function(error, result) {
             console.log('저장완료');
+            // counter 라는 콜렉션에 있는 totalPost 라는 항목도 1 증가시켜야 함. 게시물 하나를 등록할 때마다 카운터도 1 증가 시켜야 함.
+            db.collection('counter').updateOne({name: '게시물갯수'}, 
+                { $inc : {totalPost:1} }, // 수정값 입력 // .updateOne(이런 데이터를, 이렇게 수정) operator($set 연산자)를 써야함 { 연산자 : {totalPost : 바꿀값} } 이런식으로 사용
+                // operator / $set(변경) $inc(증가) $min(기존값보다적을때만변경) $rename(key값이름변경)
+            function(error, result){
+                if(error) { return console.log(error);}
+            })
         });
 
-        // counter 라는 콜렉션에 있는 totalPost 라는 항목도 1 증가시켜야 함. 게시물 하나를 등록할 때마다 카운터도 1 증가 시켜야 함.
 
     });
 
-
-    // console.log(req.body.title);    
-    // console.log(req.body.date);    
-    // DB에 저장해주세요.
 });
 
 // list로 GET 요청으로 접속하면
@@ -84,3 +86,14 @@ app.get('/list', function(req, res) {
 
 });
 
+app.delete('/delete', function(req, res) {
+    // 삭제
+    console.log(req.body)
+    //req.body._id = '1' 문자 자료형
+    req.body._id = parseInt(req.body._id); // 숫자로 변환
+    // 요청.body에 답겨온 게시물 번호를 가진 글을 db에서 찾아서 삭제
+    db.collection('post').deleteOne(req.body, function(error, result){
+        console.log('삭제완료');
+    })
+
+});
