@@ -6,6 +6,8 @@ const MongoClient = require('mongodb').MongoClient;
 app.set('view engine', 'ejs'); //EJS는 서버 데이터를 HTML에 쉽게쉽게 박아넣을 수 있게 도와주는 일종의 HTML 렌더링 엔진
 // ejs로 쓴 html을 node js 가 렌더링을 잘 해줌
 
+app.use('/public', express.static('public')); // static 파일을 보관하기 위해 public 파일을 쓸거라고 알려줌
+
 var db;
 MongoClient.connect('mongodb+srv://bang:bang0324@cluster0.sp6po.mongodb.net/myFirstDatabase?retryWrites=true&w=majority', function(error, client) {
     // 연결되면 할 일
@@ -99,3 +101,11 @@ app.delete('/delete', function(req, res) {
     })
 
 });
+
+// /detail 로 접속하면 detail.ejs 보여줌
+app.get('/detail/:id', function(req, res) { // :id
+    db.collection('post').findOne({_id : parseInt(req.params.id)}, function(error, result) { // detail/100 일 경우 -> req.params.id = 100 
+        console.log(result);
+        res.render('detail.ejs', { data : result }) // { 이런 이름으로 : 이런 데이터를 }
+    })
+})
