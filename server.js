@@ -38,13 +38,15 @@ app.get('/beauty', function(req, res) {
 });
 
 app.get('/', function(req, res) {
-    res.sendFile(__dirname + '/index.html');
+    res.render('index.ejs');
+    // res.sendFile(__dirname + '/index.html');
 });
 // sendFile() 함수를 쓰면 파일을 보낼 수 있음
 // __dirname은 현재 파일의 경로
 
 app.get('/write', function(req, res) {
-    res.sendFile(__dirname + '/write.html');
+    res.render('write.ejs');
+    //res.sendFile(__dirname + '/write.html');
 });
 
 // 어떤 사람이 /add 경로로 post 요청을 하면 ?? 를 해주세요
