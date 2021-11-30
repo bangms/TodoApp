@@ -50,6 +50,7 @@
 
       $('.delete').click(function(e) {
         var number = e.target.dataset.id;
+        var thisBtn = $(this);
         console.log('선택된 글 번호 : ' + number);
         $.ajax({
           method : 'DELETE',
@@ -57,7 +58,10 @@
           data : {_id : number} // 요청 보낼 때 삭제할 게시물 번호를 함께 전송
         }).done(function(result) {
           // 페이지를 강제로 새로고침하고 삭제 버튼 누른 li 요소를 제거하기
-          
+          console.log('성공했어염!');
+          thisBtn.parent('li').fadeOut();
+        }).fail(function(xhr, textStatus, errorThrown) { // 요청이 실패했을 경우 실행할 코드
+          console.log('실패했어염!', xhr, textStatus, errorThrown);
         });
       });
 

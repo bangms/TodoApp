@@ -65,7 +65,7 @@ app.post('/add', function(req, res) {
                 { $inc : {totalPost:1} }, // 수정값 입력 // .updateOne(이런 데이터를, 이렇게 수정) operator($set 연산자)를 써야함 { 연산자 : {totalPost : 바꿀값} } 이런식으로 사용
                 // operator / $set(변경) $inc(증가) $min(기존값보다적을때만변경) $rename(key값이름변경)
             function(error, result){
-                if(error) { return console.log(error);}
+                if(error) { return console.log(error); }
             })
         });
 
@@ -94,6 +94,8 @@ app.delete('/delete', function(req, res) {
     // 요청.body에 답겨온 게시물 번호를 가진 글을 db에서 찾아서 삭제
     db.collection('post').deleteOne(req.body, function(error, result){
         console.log('삭제완료');
+        res.status(200).send({ message : '성공했습니다!' }); // 2XX 요청 성공 / 4XX 고객잘못요청실패 / 5XX 서버문제요청실패
+        //res.status(400).send({ message : '실패했습니다!' });
     })
 
 });
