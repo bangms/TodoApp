@@ -111,3 +111,10 @@ app.get('/detail/:id', function(req, res) { // :id
         res.render('detail.ejs', { data : result }) // { 이런 이름으로 : 이런 데이터를 }
     })
 })
+
+app.get('/edit/:id', function(req, res) {
+    db.collection('post').findOne({_id : parseInt(req.params.id)}, function(error, result) {
+        console.log(result);
+        res.render('edit.ejs', { post : result}); // 파라미터중 :id 번 게시물의 제목 / 날짜 가져오기
+    })
+});

@@ -24,7 +24,8 @@
             <p>글 번호 : <%= posts[i]._id %></p>
             <h4 class="ml-2 my-3"> 할일 제목 : <%= posts[i].제목 %> </h4>
             <p> 할일 마감날짜 : <%= posts[i].날짜 %> </p>
-            <button type="button" class="delete btn btn-secondary" data-id="<%= posts[i]._id %>">삭제</button>      
+            <button type="button" class="delete btn btn-secondary" data-id="<%= posts[i]._id %>">수정</button>          
+            <button type="button" class="edit btn btn-secondary" data-id="<%= posts[i]._id %>">삭제</button>
           </li>
         <% } %>
       </ul>
@@ -50,6 +51,17 @@
           console.log('실패했어염!', xhr, textStatus, errorThrown);
         });
       });
+
+      $('.edit').click(function(e) {
+        var number = e.target.dataset.id;
+        var thisBtn = $(this);
+        console.log('선택된 글 번호 : ' +  number);
+        $.ajax({
+          method: 'UPDATE',
+          url : '/edit',
+          data : {_id : number}
+        })
+      })
 
     </script>  
     
