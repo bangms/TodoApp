@@ -3,6 +3,8 @@ const app = express(); // 객체 생성
 const bodyParser = require('body-parser');
 app.use(bodyParser.urlencoded({extended : true}));
 const MongoClient = require('mongodb').MongoClient;
+const methodOverride = require('method-override');
+app.use(methodOverride('_method'));
 app.set('view engine', 'ejs'); //EJS는 서버 데이터를 HTML에 쉽게쉽게 박아넣을 수 있게 도와주는 일종의 HTML 렌더링 엔진
 // ejs로 쓴 html을 node js 가 렌더링을 잘 해줌
 
